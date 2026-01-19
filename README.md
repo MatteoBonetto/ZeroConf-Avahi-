@@ -69,6 +69,12 @@ Try to ping test1.local
 sudo systemctl status avahi-daemon.service
 ```
 
+To list all services advertised on the local network, use:
+
+```bash
+avahi-browse -a
+```
+
 ### 4. Connect with SSH
 
 ```bash
