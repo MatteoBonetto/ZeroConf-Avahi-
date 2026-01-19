@@ -36,38 +36,25 @@ sudo apt update && sudo apt install avahi-utils avahi-daemon openssh-server
 
 ---
 
-### 2. Configure the Service
+### 2. Configure avahi name 
 
-Create a file named `/etc/avahi/services/ssh.service` with the following content:
+Open file named `/etc/avahi/avahi-daemon.conf ` with the following content:
 
-```xml
-<!-- See avahi.service(5) for more information about this configuration file -->
-<service-group>
-  <name replace-wildcards="yes">%h</name>
-  <service>
-    <type>_ssh._tcp</type>
-    <port>22</port>
-  </service>
-</service-group>
-```
+Change in [server]:
 
-This configuration makes the host accessible as `%h.local`, where `%h` is a wildcard for the current hostname, and also advertises the SSH service on TCP port 22.
+host-name= test1
 
-To list all services advertised on the local network, use:
-
-```bash
-avahi-browse -a
-```
-
----
+test1.local is the name visible on the local network
 
 ### 3. Apply the Changes
 
-Enable and start the service:
+Enable and start:
 
 ```bash
 sudo systemctl enable avahi-daemon
 sudo systemctl start avahi-daemon
+sudo systemctl enable ssh
+sudo systemctl start ssh
 ```
 
 ---
@@ -76,13 +63,18 @@ sudo systemctl start avahi-daemon
 
 Now you can use `<hostname>.local` in place of its IP address.
 
-For example, when launching **MADS agents**, assuming the broker is running on a device with hostname set to `mads-broker`, you can simply use:
+Try to ping test1.local
 
 ```bash
-mads source -s tcp://mads-broker.local:9092 my_plugin.plugin
+sudo systemctl status avahi-daemon.service
 ```
 
----
+### 4. Connect with SSH
+
+```bash
+ssh <pcusername>@<hostname>.local
+```
+Run this command from any other pc on the same local network
 
 ## Notes
 
