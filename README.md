@@ -66,6 +66,7 @@ Now you can use `<hostname>.local` in place of its IP address.
 Try to ping test1.local
 
 ```bash
+sudo systemctl restart avahi-daemon
 sudo systemctl status avahi-daemon.service
 ```
 
