@@ -1,8 +1,8 @@
-# ZeroConf Setup Guide for Linux
+# ZeroConf Setup Guide for Linux and Windows
 
 ## Abstract
 
-Using hostnames rather than IP addresses is easier and much more robust. In this guide, we learn how to set up a Linux box for advertising its address by using the **Avahi** protocol/service.
+Using hostnames rather than IP addresses is easier and much more robust. In this guide, we learn how to set up a machine for advertising its address by using the **Avahi** (Linux) or **Bonjour** (Windows) protocol/service.
 
 ## Motivation
 
@@ -86,3 +86,64 @@ Run this command from any other pc on the same local network
 
 - Make sure your firewall allows mDNS/Avahi traffic (UDP port 5353).
 - Avahi supports both service publishing and browsing on the local network.
+
+
+### On Windows (with Bonjour)
+
+On Windows, the Avahi equivalent is **Bonjour**.
+
+#### 1. Install Bonjour
+
+Download and install:
+
+[Bonjour Print Services for Windows](https://support.apple.com/en-us/106380)
+
+#### 2. Check if Active
+
+Press `WIN + R`, type `services.msc` and check that **Bonjour Service** is running.
+
+#### 3. Change PC Name
+
+Settings → System → Rename this PC → `<newpcname>` → Restart PC
+
+Test with another pc to ping:
+
+```bash
+ping <newpcname>.local
+```
+
+#### 4. Set Network as Private and Disable Firewall
+
+1. Connect to your local network  
+2. Settings → Wi-Fi → Properties of `<network>` → Set as **Private**  
+3. "Configure firewall and security settings" → Disable Firewall 
+---
+
+### SSH on Windows
+
+Open **PowerShell as Administrator**:
+
+#### 1. Configure
+
+```bash
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service sshd -StartupType Automatic
+```
+
+#### 2. Check
+Status:
+```bash
+Get-Service sshd
+```
+
+Current username:
+```bash
+whoami
+```
+`whoami` output: `<pcname>/<username>`
+
+#### 2. Connect via SSH from another PC
+ssh `<username>@<pcname>.local`
+
+
